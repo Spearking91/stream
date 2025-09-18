@@ -1,9 +1,3 @@
-import Avatar from "../../components/Avatar";
-import CustomButton from "../../components/CustomButton";
-import { CustomText } from "../../components/CustomText";
-import CustomTextInput from "../../components/CustomTextInput";
-import { auth } from "../../firebaseConfig";
-import { useDeColors } from "../../hooks/useDeColors";
 import { Entypo, Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Link, router } from "expo-router";
@@ -24,6 +18,12 @@ import {
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Avatar from "../../components/Avatar";
+import CustomButton from "../../components/CustomButton";
+import { CustomText } from "../../components/CustomText";
+import CustomTextInput from "../../components/CustomTextInput";
+import { auth } from "../../firebaseConfig";
+import { useDeColors } from "../../hooks/useDeColors";
 
 const TOTAL_PAGES = 5; // Set this to your actual number of pages
 
@@ -155,7 +155,7 @@ const SignUp = () => {
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
             <Image
-              source={require("@/assets/images/logo.png")}
+              source={require("../assets/images/logo.png")}
               resizeMode="contain"
               style={{ width: 150, height: 150 }}
             />
