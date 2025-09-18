@@ -32,7 +32,7 @@ export default function PagesLayout() {
               <TouchableOpacity onPress={() => router.back()}>
                 <AntDesign name="arrowleft" size={20} color={textColor} />
               </TouchableOpacity>
-              <Avatar />
+              <Avatar source={undefined} />
             </View>
           ),
           headerRight: () => (
