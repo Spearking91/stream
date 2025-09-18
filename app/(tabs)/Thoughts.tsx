@@ -1,16 +1,16 @@
 import Avatar from "@/components/Avatar";
 import PostTile from "@/components/PostTile";
 import ThoughtTile from "@/components/ThoughtTile";
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 const Thoughts = () => {
-   const { backgroundColor } = useDeColors();
+  const { backgroundColor } = useDeColors();
   return (
-    <View style={{ flex: 1, backgroundColor}}>
+    <View style={{ flex: 1, backgroundColor }}>
       <View
         style={{
           flex: 0.5,

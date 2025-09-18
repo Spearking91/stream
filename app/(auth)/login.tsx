@@ -1,7 +1,7 @@
 import CustomButton from "@/components/CustomButton";
 import CustomTextInput from "@/components/CustomTextInput";
 import { auth } from "@/firebaseConfig";
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 
 import { Link, router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";

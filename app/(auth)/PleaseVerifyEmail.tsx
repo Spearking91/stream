@@ -1,5 +1,5 @@
 import { CustomText } from "@/components/CustomText";
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
@@ -11,7 +11,7 @@ const PleaseVerifyEmail = () => {
   const { email } = useLocalSearchParams<{ email: string }>();
 
   return (
-    <SafeAreaView style={{ flex: 1,}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,

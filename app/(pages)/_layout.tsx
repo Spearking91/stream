@@ -1,5 +1,5 @@
 import Avatar from "@/components/Avatar";
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { router, Stack } from "expo-router";

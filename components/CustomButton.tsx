@@ -1,6 +1,6 @@
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -26,7 +26,7 @@ const CustomButton = ({
   isGoogle = false,
 }: props) => {
   const { textColor, tintColor } = useDeColors();
- 
+
   return (
     <TouchableOpacity
       style={{

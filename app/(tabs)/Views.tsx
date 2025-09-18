@@ -1,12 +1,12 @@
 import { ThemedText } from "@/app-example/components/ThemedText";
 import Avatar from "@/components/Avatar";
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 
 import React from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 
 const Views = () => {
-   const { backgroundColor } = useDeColors();
+  const { backgroundColor } = useDeColors();
   return (
     <View
       style={{

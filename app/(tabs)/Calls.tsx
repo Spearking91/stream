@@ -1,6 +1,6 @@
 import { ThemedText } from "@/app-example/components/ThemedText";
 import ChatlistTile from "@/components/ChatlistTile";
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,7 +24,7 @@ type ChatItem = {
 const Calls = () => {
   const [Data, setData] = useState<ChatItem[] | undefined>(undefined);
   const [search, setSearch] = useState(""); // 1. Add search state
-   const { backgroundColor } = useDeColors();
+  const { backgroundColor } = useDeColors();
 
   useEffect(() => {
     const getCachedData = async () => {

@@ -1,7 +1,7 @@
 import Avatar from "@/components/Avatar";
 import SettingsTile from "@/components/SettingsTile";
 import { auth } from "@/firebaseConfig";
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
@@ -10,7 +10,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 const Settings = () => {
   const [isLoading, setIsLoading] = useState(false);
-   const {backgroundColor } = useDeColors();
+  const { backgroundColor } = useDeColors();
   useEffect(() => {
     console.log("Current user on mount:", auth.currentUser);
   }, []);
@@ -63,7 +63,14 @@ const Settings = () => {
   };
 
   return (
-    <View style={{ padding: 10, flex: 1, gap: 20, backgroundColor: backgroundColor }}>
+    <View
+      style={{
+        padding: 10,
+        flex: 1,
+        gap: 20,
+        backgroundColor: backgroundColor,
+      }}
+    >
       <View>
         <Avatar />
       </View>

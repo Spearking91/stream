@@ -1,11 +1,11 @@
 import Avatar from "@/components/Avatar";
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { View } from "react-native";
 
 export default function TabsLayout() {
-   const { textColor, backgroundColor } = useDeColors();
+  const { textColor, backgroundColor } = useDeColors();
   return (
     <Tabs
       screenOptions={{

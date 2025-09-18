@@ -1,4 +1,4 @@
-import { useDeColors } from "@/hooks/deColors";
+import { useDeColors } from "@/hooks/useDeColors";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -17,15 +17,15 @@ const CustomTextInput = ({
   setValue,
   style,
   design,
-  keyboardType
+  keyboardType,
 }: {
   placeholder: string;
   text: string;
   value: string;
   setValue: any;
   style?: any;
-  design? : any
-  keyboardType?: KeyboardTypeOptions | undefined
+  design?: any;
+  keyboardType?: KeyboardTypeOptions | undefined;
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { textColor, tabIconDefaultColor } = useDeColors();
@@ -48,11 +48,11 @@ const CustomTextInput = ({
           padding: 5,
           flexDirection: "row",
           alignItems: "center",
-          ...design
+          ...design,
         }}
       >
         <TextInput
-        keyboardType={keyboardType}
+          keyboardType={keyboardType}
           style={{
             flex: 1,
             color: textColor,
