@@ -155,7 +155,7 @@ const SignUp = () => {
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
             <Image
-              source={require("../assets/images/logo.png")}
+              source={require("../../assets/images/logo.png")}
               resizeMode="contain"
               style={{ width: 150, height: 150 }}
             />
