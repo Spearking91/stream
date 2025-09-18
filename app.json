@@ -25,9 +25,25 @@
             "scheme": "https",
             "host": "stream-chat-app-mobile.firebaseapp.com"
           },
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        },
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": {
+            "scheme": "https",
+            "host": "stream-chat-app-mobile.firebaseapp.com"
+          },
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
-      ]
+      ],
+      "package": "com.anonymous.stream"
     },
     "web": {
       "bundler": "metro",
