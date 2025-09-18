@@ -1,5 +1,5 @@
-import { CustomText } from "@/components/CustomText";
-import { auth } from "@/firebaseConfig";
+import { CustomText } from "../../components/CustomText";
+import { auth } from "../../firebaseConfig";
 import { router, useLocalSearchParams } from "expo-router";
 import { applyActionCode } from "firebase/auth";
 import React, { useEffect, useState } from "react";

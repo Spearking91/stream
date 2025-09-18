@@ -9,7 +9,7 @@ import {
   listAll,
   getBlob
 } from "firebase/storage";
-import { storage } from "@/firebaseConfig"; // Your firebase config file
+import { storage } from "../../firebaseConfig"; // Your firebase config file
 
 // ===== BASIC FILE UPLOAD =====
 

@@ -1,4 +1,4 @@
-import { auth, db } from "@/firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, or, orderBy, query, Timestamp, where } from "firebase/firestore";
 
 export async function CreateUserDetails(

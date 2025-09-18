@@ -1,6 +1,6 @@
-import { ThemedText } from "@/app-example/components/ThemedText";
-import ChatlistTile from "@/components/ChatlistTile";
-import { useDeColors } from "@/hooks/useDeColors";
+import { ThemedText } from "../../app-example/components/ThemedText";
+import ChatlistTile from "../../components/ChatlistTile";
+import { useDeColors } from "../../hooks/useDeColors";
 
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";

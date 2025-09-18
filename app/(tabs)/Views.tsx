@@ -1,6 +1,6 @@
-import { ThemedText } from "@/app-example/components/ThemedText";
-import Avatar from "@/components/Avatar";
-import { useDeColors } from "@/hooks/useDeColors";
+import { ThemedText } from "../../app-example/components/ThemedText";
+import Avatar from "../../components/Avatar";
+import { useDeColors } from "../../hooks/useDeColors";
 
 import React from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
@@ -60,8 +60,7 @@ const Views = () => {
                   borderWidth: 2,
                   borderColor: "#5b9e13ff",
                 }}
-                radius={30}
-              />
+                radius={30} source={undefined}              />
             </View>
           </View>
         )}

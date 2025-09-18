@@ -1,9 +1,9 @@
-import Avatar from "@/components/Avatar";
-import CustomButton from "@/components/CustomButton";
-import { CustomText } from "@/components/CustomText";
-import CustomTextInput from "@/components/CustomTextInput";
-import { auth } from "@/firebaseConfig";
-import { useDeColors } from "@/hooks/useDeColors";
+import Avatar from "../../components/Avatar";
+import CustomButton from "../../components/CustomButton";
+import { CustomText } from "../../components/CustomText";
+import CustomTextInput from "../../components/CustomTextInput";
+import { auth } from "../../firebaseConfig";
+import { useDeColors } from "../../hooks/useDeColors";
 import { Entypo, Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Link, router } from "expo-router";

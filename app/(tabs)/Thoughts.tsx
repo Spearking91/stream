@@ -1,7 +1,7 @@
-import Avatar from "@/components/Avatar";
-import PostTile from "@/components/PostTile";
-import ThoughtTile from "@/components/ThoughtTile";
-import { useDeColors } from "@/hooks/useDeColors";
+import Avatar from "../../components/Avatar";
+import PostTile from "../../components/PostTile";
+import ThoughtTile from "../../components/ThoughtTile";
+import { useDeColors } from "../../hooks/useDeColors";
 
 import { AntDesign } from "@expo/vector-icons";
 import React from "react";
@@ -34,7 +34,7 @@ const Thoughts = () => {
               alignSelf: "flex-start",
             }}
           >
-            <Avatar />
+            <Avatar source={undefined} />
             <View
               style={{
                 position: "absolute",

@@ -1,4 +1,4 @@
-import { useDeColors } from "@/hooks/useDeColors";
+import { useDeColors } from "../../hooks/useDeColors";
 import { Stack } from "expo-router";
 
 export default function RootLayout() {

@@ -1,4 +1,4 @@
-import { auth } from "@/firebaseConfig";
+import { auth } from "../firebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { onAuthStateChanged } from "firebase/auth";

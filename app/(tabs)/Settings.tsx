@@ -1,7 +1,7 @@
-import Avatar from "@/components/Avatar";
-import SettingsTile from "@/components/SettingsTile";
-import { auth } from "@/firebaseConfig";
-import { useDeColors } from "@/hooks/useDeColors";
+import Avatar from "../../components/Avatar";
+import SettingsTile from "../../components/SettingsTile";
+import { auth } from "../../firebaseConfig";
+import { useDeColors } from "../../hooks/useDeColors";
 
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
@@ -72,7 +72,7 @@ const Settings = () => {
       }}
     >
       <View>
-        <Avatar />
+        <Avatar source={undefined} />
       </View>
       <SettingsTile title={"Preferences"} Icon={undefined} data={data} />
       <SettingsTile title={"Account"} Icon={undefined} data={Account} />

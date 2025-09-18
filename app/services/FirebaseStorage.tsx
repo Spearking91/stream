@@ -1,4 +1,4 @@
-import { db, storage } from "@/firebaseConfig";
+import { db, storage } from "../../firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 

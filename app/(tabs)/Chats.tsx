@@ -1,6 +1,6 @@
-import ChatlistTile from "@/components/ChatlistTile";
-import { auth } from "@/firebaseConfig";
-import { useDeColors } from "@/hooks/useDeColors";
+import ChatlistTile from "../../components/ChatlistTile";
+import { auth } from "../../firebaseConfig";
+import { useDeColors } from "../../hooks/useDeColors";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";

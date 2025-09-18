@@ -1,5 +1,5 @@
-import { uploadProfilePicture } from "@/app/services/FirebaseStorage";
-import { CreateUserDetails } from "@/app/services/FirestoreServices";
+import { uploadProfilePicture } from "../services/FirebaseStorage";
+import { CreateUserDetails } from "../services/FirestoreServices";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {

@@ -1,4 +1,4 @@
-import ChatSheet from "@/components/ChatSheet";
+import ChatSheet from "../../components/ChatSheet";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { ImageBackground } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
