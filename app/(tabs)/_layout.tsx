@@ -1,5 +1,5 @@
-import Avatar from "@/components/Avatar";
-import { useDeColors } from "@/hooks/useDeColors";
+import Avatar from "../../components/Avatar";
+import { useDeColors } from "../../hooks/useDeColors";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { View } from "react-native";
@@ -28,7 +28,7 @@ export default function TabsLayout() {
           headerRight: () => (
             <View style={{ marginRight: 10, gap: 30, flexDirection: "row" }}>
               {/* <Feather name="more-vertical" size={24} color="black" /> */}
-              <Avatar radius={35} />
+              <Avatar radius={35} source={undefined} />
             </View>
           ),
         }}

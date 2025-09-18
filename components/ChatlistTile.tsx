@@ -35,7 +35,7 @@ const ChatlistTile = ({
       }}
       onPress={onPress}
     >
-      <Avatar />
+      <Avatar source={undefined} />
       <View style={{ flex: 3 }}>
         <CustomText style={{ fontWeight: "500", fontSize: 18 }}>
           {User}

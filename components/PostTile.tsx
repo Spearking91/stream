@@ -1,4 +1,4 @@
-import { ThemedText } from "@/app-example/components/ThemedText";
+import { ThemedText } from "../app-example/components/ThemedText";
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -39,7 +39,7 @@ const PostTile = () => {
           alignItems: "center",
         }}
       >
-        <Avatar radius={30} />
+        <Avatar radius={30} source={undefined} />
         <View
           style={{
             flexDirection: "column",
