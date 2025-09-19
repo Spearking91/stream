@@ -4,7 +4,7 @@
     "slug": "stream",
     "version": "1.0.0",
     "orientation": "portrait",
-
+    "icon": "./assets/images/logo.png",
     "scheme": "stream",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -37,7 +37,8 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static"
+      "output": "static",
+      "favicon": "./assets/images/logo.png"
     },
     "plugins": [
       "expo-router",
