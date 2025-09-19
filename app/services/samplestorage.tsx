@@ -9,18 +9,15 @@ import {
   listAll,
   getBlob
 } from "firebase/storage";
-import { storage } from "../../firebaseConfig"; // Your firebase config file
+import { storage } from "../../firebaseConfig"; 
 
-// ===== BASIC FILE UPLOAD =====
-
-// 1. Upload a file (simple upload)
 async function uploadFile(file: any, path: any) {
   try {
     const storageRef = ref(storage, path);
     const snapshot = await uploadBytes(storageRef, file);
     console.log('File uploaded successfully!', snapshot);
     
-    // Get download URL
+    
     const downloadURL = await getDownloadURL(snapshot.ref);
     console.log('Download URL:', downloadURL);
     return downloadURL;
@@ -30,14 +27,14 @@ async function uploadFile(file: any, path: any) {
   }
 }
 
-// 2. Upload with progress monitoring
+
 function uploadFileWithProgress(file: any, path: any, onProgress: any) {
   return new Promise((resolve, reject) => {
     const storageRef = ref(storage, path);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on('state_changed',
-      // Progress function
+      
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
@@ -55,12 +52,12 @@ function uploadFileWithProgress(file: any, path: any, onProgress: any) {
             break;
         }
       },
-      // Error function
+      
       (error) => {
         console.error('Upload failed:', error);
         reject(error);
       },
-      // Success function
+      
       async () => {
         try {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
@@ -77,9 +74,9 @@ function uploadFileWithProgress(file: any, path: any, onProgress: any) {
   });
 }
 
-// ===== SPECIALIZED UPLOAD FUNCTIONS =====
 
-// Upload user profile picture
+
+
 async function uploadProfilePicture(userId: any, file: any) {
   const path = `users/${userId}/profile.jpg`;
   try {
@@ -92,7 +89,7 @@ async function uploadProfilePicture(userId: any, file: any) {
   }
 }
 
-// Upload multiple files
+
 async function uploadMultipleFiles(files: any[], basePath: string) {
   try {
     const uploadPromises = files.map((file, index) => {
@@ -110,7 +107,7 @@ async function uploadMultipleFiles(files: any[], basePath: string) {
   }
 }
 
-// Upload with custom metadata
+
 async function uploadWithMetadata(file, path, customMetadata = {}) {
   try {
     const storageRef = ref(storage, path);
@@ -135,9 +132,9 @@ async function uploadWithMetadata(file, path, customMetadata = {}) {
   }
 }
 
-// ===== FILE DOWNLOAD =====
 
-// Get download URL
+
+
 async function getFileURL(path) {
   try {
     const storageRef = ref(storage, path);
@@ -150,7 +147,7 @@ async function getFileURL(path) {
   }
 }
 
-// Download file as blob
+
 async function downloadFile(path) {
   try {
     const storageRef = ref(storage, path);
@@ -163,9 +160,9 @@ async function downloadFile(path) {
   }
 }
 
-// ===== FILE MANAGEMENT =====
 
-// Delete a file
+
+
 async function deleteFile(path) {
   try {
     const storageRef = ref(storage, path);
@@ -177,7 +174,7 @@ async function deleteFile(path) {
   }
 }
 
-// Get file metadata
+
 async function getFileMetadata(path) {
   try {
     const storageRef = ref(storage, path);
@@ -190,7 +187,7 @@ async function getFileMetadata(path) {
   }
 }
 
-// Update file metadata
+
 async function updateFileMetadata(path, newMetadata) {
   try {
     const storageRef = ref(storage, path);
@@ -203,7 +200,7 @@ async function updateFileMetadata(path, newMetadata) {
   }
 }
 
-// List files in a directory
+
 async function listFiles(path) {
   try {
     const storageRef = ref(storage, path);
@@ -211,7 +208,7 @@ async function listFiles(path) {
     
     const files = [];
     
-    // Get download URLs for all files
+    
     for (const itemRef of result.items) {
       const downloadURL = await getDownloadURL(itemRef);
       const metadata = await getMetadata(itemRef);
@@ -237,9 +234,9 @@ async function listFiles(path) {
   }
 }
 
-// ===== UTILITY FUNCTIONS =====
 
-// Validate file type
+
+
 function validateFileType(file, allowedTypes) {
   const fileType = file.type;
   const isValid = allowedTypes.includes(fileType);
@@ -251,7 +248,7 @@ function validateFileType(file, allowedTypes) {
   return true;
 }
 
-// Validate file size
+
 function validateFileSize(file, maxSizeInMB) {
   const fileSizeInMB = file.size / (1024 * 1024);
   
@@ -262,7 +259,7 @@ function validateFileSize(file, maxSizeInMB) {
   return true;
 }
 
-// Generate unique filename
+
 function generateUniqueFileName(originalName) {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2);
@@ -270,7 +267,7 @@ function generateUniqueFileName(originalName) {
   return `${timestamp}_${random}.${extension}`;
 }
 
-// ===== COMPLETE UPLOAD HANDLER =====
+
 
 async function handleFileUpload(file, userId, options = {}) {
   try {
@@ -282,18 +279,18 @@ async function handleFileUpload(file, userId, options = {}) {
       onProgress
     } = options;
     
-    // Validate file
+    
     validateFileType(file, allowedTypes);
     validateFileSize(file, maxSizeInMB);
     
-    // Generate path
+    
     const fileName = generateUniqueFileName(file.name);
     const path = `${folder}/${userId}/${fileName}`;
     
-    // Upload with progress
+    
     const result = await uploadFileWithProgress(file, path, onProgress);
     
-    // Add custom metadata if provided
+    
     if (Object.keys(customMetadata).length > 0) {
       await updateFileMetadata(path, {
         customMetadata: {
@@ -318,9 +315,9 @@ async function handleFileUpload(file, userId, options = {}) {
   }
 }
 
-// ===== REACT COMPONENT EXAMPLE =====
 
-// Example usage in a React component
+
+
 function FileUploadComponent() {
   const handleFileSelect = async (event:any) => {
     const file = event.target.files[0];
@@ -333,16 +330,16 @@ function FileUploadComponent() {
         maxSizeInMB: 5,
         onProgress: (progress:any, state: any) => {
           console.log(`Upload progress: ${progress}%`);
-          // Update UI with progress
+          
         }
       });
       
       console.log('Upload successful:', result);
-      // Update UI with download URL
+      
       
     } catch (error) {
       console.error('Upload failed:', error);
-      // Show error message to user
+      
     }
   };
   
@@ -355,9 +352,9 @@ function FileUploadComponent() {
   `;
 }
 
-// ===== BATCH OPERATIONS =====
 
-// Delete multiple files
+
+
 async function deleteMultipleFiles(paths) {
   try {
     const deletePromises = paths.map(path => deleteFile(path));
@@ -369,7 +366,7 @@ async function deleteMultipleFiles(paths) {
   }
 }
 
-// Copy file (download then upload to new location)
+
 async function copyFile(sourcePath: any, destinationPath: any) {
   try {
     const blob = await downloadFile(sourcePath);
@@ -389,7 +386,7 @@ async function copyFile(sourcePath: any, destinationPath: any) {
   }
 }
 
-// Export all functions
+
 export {
   uploadFile,
   uploadFileWithProgress,

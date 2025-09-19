@@ -1,4 +1,3 @@
-import ChatSheet from "../../components/ChatSheet";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { ImageBackground } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
@@ -11,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ChatSheet from "../../components/ChatSheet";
 
 const ChatPage = () => {
   const params = useLocalSearchParams();
@@ -19,8 +19,6 @@ const ChatPage = () => {
     ? JSON.parse(params.recepient as string)
     : null;
   const [isSwitch, setIsSwitch] = useState(false);
-
-  console.log("Chat ID:", chatId, "Recepient:", recepient);
 
   return (
     <SafeAreaView edges={["bottom"]} style={{ flex: 1 }}>

@@ -1,6 +1,3 @@
-import ChatlistTile from "../../components/ChatlistTile";
-import { auth } from "../../firebaseConfig";
-import { useDeColors } from "../../hooks/useDeColors";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -14,6 +11,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import ChatlistTile from "../../components/ChatlistTile";
+import { auth } from "../../firebaseConfig";
+import { useDeColors } from "../../hooks/useDeColors";
 import {
   CreateChatPage,
   listenToUserChats,
@@ -207,7 +207,6 @@ const Chats = () => {
                   Message={item.email}
                   onPress={() => {
                     handleCreateChat(item.id);
-                    console.log("Start chat with", item.username);
                   }}
                 />
               )}

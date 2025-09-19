@@ -5,15 +5,11 @@ import { useDeColors } from "../../hooks/useDeColors";
 
 import { router } from "expo-router";
 import { signOut } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-
 const Settings = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { backgroundColor } = useDeColors();
-  useEffect(() => {
-    console.log("Current user on mount:", auth.currentUser);
-  }, []);
   const [data] = useState([
     {
       Icon: "user",
@@ -55,8 +51,8 @@ const Settings = () => {
       await signOut(auth);
       router.replace("/login");
     } catch (error: any) {
-      console.log(error);
-      alert("Failed to log out: " + error.message);
+      console.error("Failed to log out: ", error);
+      // Consider replacing this with a user-friendly toast/snackbar
     } finally {
       setIsLoading(false);
     }

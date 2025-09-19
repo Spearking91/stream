@@ -35,7 +35,7 @@ const Calls = () => {
           setData(JSON.parse(cached));
         }
       } catch (error) {
-        console.error(error);
+        console.error("Failed to get cached data:", error);
       }
     };
     getCachedData();

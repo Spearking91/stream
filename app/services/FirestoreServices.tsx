@@ -1,5 +1,17 @@
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  or,
+  orderBy,
+  query,
+  Timestamp,
+  where,
+} from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig";
-import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, or, orderBy, query, Timestamp, where } from "firebase/firestore";
 
 export async function CreateUserDetails(
   username: string,
@@ -14,7 +26,6 @@ export async function CreateUserDetails(
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    console.log("Document written with ID: ", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Error adding document: ", error);
@@ -55,7 +66,6 @@ export async function getUser(userId: string) {
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() };
     } else {
-      console.log("No such user document!");
       return null;
     }
   } catch (error) {
@@ -83,7 +93,6 @@ export async function CreateChatPage(
     if (!querySnapshot.empty) {
       // Chat already exists, return its ID
       const existingChat = querySnapshot.docs[0];
-      console.log("Chat already exists with ID: ", existingChat.id);
       return existingChat.id;
     }
 
@@ -95,7 +104,6 @@ export async function CreateChatPage(
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
     });
-    console.log("New chat created with ID: ", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Error adding document: ", error);

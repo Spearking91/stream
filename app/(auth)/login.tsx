@@ -26,8 +26,8 @@ const login = () => {
       );
       if (user) return router.replace("/Chats");
     } catch (error: any) {
-      console.log(error);
-      alert("Failed to sign in: " + error.message);
+      console.error("Failed to sign in: ", error);
+      // Consider replacing this with a user-friendly toast/snackbar
     } finally {
       setIsLoading(false);
     }

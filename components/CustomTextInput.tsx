@@ -1,14 +1,16 @@
-import { useDeColors } from "../hooks/useDeColors";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   KeyboardTypeOptions,
+  StyleProp,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from "react-native";
+import { useDeColors } from "../hooks/useDeColors";
 
 const CustomTextInput = ({
   placeholder,
@@ -22,15 +24,15 @@ const CustomTextInput = ({
   placeholder: string;
   text: string;
   value: string;
-  setValue: any;
-  style?: any;
-  design?: any;
+  setValue: (text: string) => void;
+  style?: StyleProp<ViewStyle>;
+  design?: StyleProp<ViewStyle>;
   keyboardType?: KeyboardTypeOptions | undefined;
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { textColor, tabIconDefaultColor } = useDeColors();
   return (
-    <View style={{ flexDirection: "column", ...style }}>
+    <View style={[{ flexDirection: "column" }, style]}>
       <Text
         style={{
           fontWeight: "500",
@@ -41,15 +43,17 @@ const CustomTextInput = ({
         {text}
       </Text>
       <View
-        style={{
-          borderColor: tabIconDefaultColor,
-          borderWidth: 1,
-          borderRadius: 10,
-          padding: 5,
-          flexDirection: "row",
-          alignItems: "center",
-          ...design,
-        }}
+        style={[
+          {
+            borderColor: tabIconDefaultColor,
+            borderWidth: 1,
+            borderRadius: 10,
+            padding: 5,
+            flexDirection: "row",
+            alignItems: "center",
+          },
+          design,
+        ]}
       >
         <TextInput
           keyboardType={keyboardType}

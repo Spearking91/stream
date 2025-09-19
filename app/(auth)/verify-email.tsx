@@ -1,10 +1,10 @@
-import { CustomText } from "../../components/CustomText";
-import { auth } from "../../firebaseConfig";
 import { router, useLocalSearchParams } from "expo-router";
 import { applyActionCode } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { CustomText } from "../../components/CustomText";
+import { auth } from "../../firebaseConfig";
 
 const VerifyEmail = () => {
   const { oobCode } = useLocalSearchParams<{ oobCode: string }>();
@@ -26,7 +26,7 @@ const VerifyEmail = () => {
         }, 2000);
       } catch (err: any) {
         setError("Failed to verify email. The link may be expired or invalid.");
-        console.error(err);
+        console.error("Email verification failed:", err);
       }
     };
 

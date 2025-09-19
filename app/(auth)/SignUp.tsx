@@ -123,8 +123,8 @@ const SignUp = () => {
         });
       }
     } catch (error: any) {
-      console.log(error);
-      alert("Failed to sign up: " + error.message);
+      console.error("Signup failed: ", error);
+      // Consider replacing this with a user-friendly toast/snackbar
     } finally {
       setIsLoading(false);
     }
