@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/app-example/hooks/useThemeColor";
+import { useThemeColor } from "../app-example/hooks/useThemeColor";
 import { StyleSheet, Text, type TextProps } from "react-native";
 
 export type CustomTextProps = TextProps;

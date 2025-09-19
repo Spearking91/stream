@@ -1,4 +1,4 @@
-import { useDeColors } from "@/hooks/useDeColors";
+import { useDeColors } from "../hooks/useDeColors";
 import {
   AntDesign,
   FontAwesome,
