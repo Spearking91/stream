@@ -1,8 +1,8 @@
-import { ThemedText } from "../app-example/components/ThemedText";
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import Avatar from "./Avatar";
+import { CustomText } from "./CustomText";
 
 const PostTile = () => {
   return (
@@ -46,10 +46,8 @@ const PostTile = () => {
             flex: 1,
           }}
         >
-          <ThemedText type="defaultSemiBold">User</ThemedText>
-          <ThemedText type="default" style={{ fontSize: 12 }}>
-            31 Aug at 11:32
-          </ThemedText>
+          <CustomText>User</CustomText>
+          <CustomText style={{ fontSize: 12 }}>31 Aug at 11:32</CustomText>
         </View>
         <TouchableOpacity>
           <Feather name="more-vertical" size={24} color="black" />
