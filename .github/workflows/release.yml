@@ -1,26 +1,61 @@
-name: Build Android Release
+name: Build and Release Android App
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*.*.*" # Triggers on tags like v1.0.0, v1.2.3, etc.
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "18" # Match your project's Node.js version
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17" # Expo requires Java 17
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build Android Release
+      - name: Build Android App (AAB)
+        # This command builds the Android App Bundle (AAB)
+        # The output will be in android/app/build/outputs/bundle/release/app-release.aab
         run: |
           cd android
-          ./gradlew assembleRelease
+          ./gradlew bundleRelease
+
+      - name: Get App Version
+        # Extracts the version from the tag (e.g., v1.0.1 -> 1.0.1)
+        id: get_version
+        run: echo "APP_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: "Release v${{ env.APP_VERSION }}"
+          body: "Release version ${{ env.APP_VERSION }} of the Stream app."
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset (AAB)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./android/app/build/outputs/bundle/release/app-release.aab
+          asset_name: stream-v${{ env.APP_VERSION }}.aab
+          asset_content_type: application/vnd.android.package-archive
