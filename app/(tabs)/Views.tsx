@@ -1,6 +1,5 @@
-
-import { CustomText } from "../../components/CustomText";
 import Avatar from "../../components/Avatar";
+import { CustomText } from "../../components/CustomText";
 import { useDeColors } from "../../hooks/useDeColors";
 
 import React from "react";
@@ -34,7 +33,7 @@ const Views = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/image(4).jpg")}
+              source={require("../../assets/images/image(4).jpg")}
               resizeMode="cover"
               style={{ width: "100%", height: "100%" }}
             />
@@ -61,7 +60,9 @@ const Views = () => {
                   borderWidth: 2,
                   borderColor: "#5b9e13ff",
                 }}
-                radius={30} source={undefined}              />
+                radius={30}
+                source={undefined}
+              />
             </View>
           </View>
         )}
