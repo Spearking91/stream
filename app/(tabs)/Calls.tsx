@@ -1,4 +1,5 @@
-import { ThemedText } from "../../app-example/components/ThemedText";
+import { CustomText } from "../../components/CustomText";
+
 import ChatlistTile from "../../components/ChatlistTile";
 import { useDeColors } from "../../hooks/useDeColors";
 
@@ -72,7 +73,7 @@ const Calls = () => {
           <Feather name="search" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      <ThemedText type="defaultSemiBold">Recent calls</ThemedText>
+      <CustomText style={{}}>Recent calls</CustomText>
       <FlatList
         data={filteredData} // 4. Use filtered data
         style={{ flex: 1 }}
