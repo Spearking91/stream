@@ -1,4 +1,5 @@
-import { ThemedText } from "../../app-example/components/ThemedText";
+
+import { CustomText } from "../../components/CustomText";
 import Avatar from "../../components/Avatar";
 import { useDeColors } from "../../hooks/useDeColors";
 
@@ -15,7 +16,7 @@ const Views = () => {
         padding: 10,
       }}
     >
-      <ThemedText type="defaultSemiBold">Trending Views</ThemedText>
+      <CustomText>Trending Views</CustomText>
       <FlatList
         data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]}
         horizontal
