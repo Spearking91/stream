@@ -1,4 +1,4 @@
-import { useThemeColor } from "../app-example/hooks/useThemeColor";
+import { useThemeColor } from "./useThemeColor";
 
 /**
  * Custom hook to get all theme colors.
