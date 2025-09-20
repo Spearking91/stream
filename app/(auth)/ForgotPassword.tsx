@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 const ForgotPassword = () => {
   return (
     <View>
-      <Text>ForgotPassword</Text>
+      <Text>Forgot Password?</Text>
     </View>
   );
 };
