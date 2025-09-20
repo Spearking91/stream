@@ -25,7 +25,16 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
+      - name: Cache node modules
+        id: cache-nodemodules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
+        # Only run npm install if the cache was not restored
+        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm install
 
       - name: Build Android App (AAB)
