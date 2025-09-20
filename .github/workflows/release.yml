@@ -15,26 +15,25 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18" # Match your project's Node.js version
+          node-version: "18"
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: "temurin"
-          java-version: "17" # Expo requires Java 17
+          java-version: "17"
 
       - name: Install dependencies
         run: npm install
 
       - name: Build Android App (AAB)
-        # This command builds the Android App Bundle (AAB)
-        # The output will be in android/app/build/outputs/bundle/release/app-release.aab
+
         run: |
           cd android
           ./gradlew bundleRelease
 
       - name: Get App Version
-        # Extracts the version from the tag (e.g., v1.0.1 -> 1.0.1)
+
         id: get_version
         run: echo "APP_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
