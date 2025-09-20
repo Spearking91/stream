@@ -40,11 +40,13 @@ jobs:
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: npm install
 
-      - name: Build Android App (AAB)
-
+      - name: Build Android App (AAB & APK)
         run: |
           cd android
+          # Build the AAB for the Google Play Store
           ./gradlew bundleRelease
+          # Build the APK for direct installation
+          ./gradlew assembleRelease
 
       - name: Get App Version
         # This step only runs if the trigger was a tag
@@ -74,4 +76,15 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./android/app/build/outputs/bundle/release/app-release.aab
           asset_name: stream-v${{ env.APP_VERSION }}.aab
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload Release Asset (APK)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./android/app/build/outputs/apk/release/app-release.apk
+          asset_name: stream-v${{ env.APP_VERSION }}.apk
           asset_content_type: application/vnd.android.package-archive
