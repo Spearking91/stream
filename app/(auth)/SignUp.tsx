@@ -40,7 +40,7 @@ const SignUp = () => {
   const [correct, setCorrect] = useState(false);
   const [newImage, setNewImage] = useState<any>(null);
   const parameters = [
-    { tip: "At least eight characters" },
+    { tip: "At least 8 characters" },
     { tip: "Both fields must be identical" },
     { tip: "Must contain at least a symbol or a number" },
     { tip: "Must contain at least a capital letter" },
