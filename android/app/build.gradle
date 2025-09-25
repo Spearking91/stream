@@ -94,12 +94,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0.0"
-
-        externalNativeBuild {
-            cmake {
-                cppFlags "-std=c++20"
-            }
-        }
     }
     signingConfigs {
         debug {
@@ -121,6 +115,12 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             crunchPngs (findProperty('android.enablePngCrunchInReleaseBuilds')?.toBoolean() ?: true)
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            // Use C++20 standard for native builds, required by React Native 0.74+ and its dependencies.
+            cppFlags "-std=c++20"
         }
     }
     packagingOptions {
