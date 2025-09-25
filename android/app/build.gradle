@@ -117,12 +117,6 @@ android {
             crunchPngs (findProperty('android.enablePngCrunchInReleaseBuilds')?.toBoolean() ?: true)
         }
     }
-    externalNativeBuild {
-        cmake {
-            // Use C++20 standard for native builds, required by React Native 0.74+ and its dependencies.
-            cppFlags "-std=c++20"
-        }
-    }
     packagingOptions {
         jniLibs {
             useLegacyPackaging (findProperty('expo.useLegacyPackaging')?.toBoolean() ?: false)

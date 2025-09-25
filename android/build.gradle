@@ -1,18 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-  ext {
-    // This is the central place to define component versions
-    // for your entire Android project.
-    buildToolsVersion = "34.0.0" // This can often stay the same
-    minSdkVersion = 24
-    compileSdkVersion = 35
-    targetSdkVersion = 35
-
-    // We use NDK 25 which is LTS and recommended by React Native.
-    // Make sure you have this version installed in Android Studio's SDK Manager.
-    ndkVersion = "25.2.9519653"
-  }
   repositories {
     google()
     mavenCentral()
