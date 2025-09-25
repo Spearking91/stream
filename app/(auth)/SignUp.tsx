@@ -10,7 +10,6 @@ import React, { useEffect, useState } from "react";
 import {
   BackHandler,
   FlatList,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,6 +17,7 @@ import {
 } from "react-native";
 import PagerView from "react-native-pager-view";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LogoSvG from "../../assets/svg/logo.svg";
 import Avatar from "../../components/Avatar";
 import CustomButton from "../../components/CustomButton";
 import { CustomText } from "../../components/CustomText";
@@ -110,10 +110,9 @@ const SignUp = () => {
 
         // Send the verification email with the deep link
         await sendEmailVerification(userCredential.user, {
-          // This URL is the deep link that will open your app.
-          // We will configure the app to handle this link.
+          // This is a standard web link. The OS will open the app if it's
+          // configured for Universal Links / App Links.
           url: `https://stream-chat-app-mobile.firebaseapp.com/verify-email`,
-          handleCodeInApp: true,
         });
 
         // Redirect to a page telling the user to check their email
@@ -154,11 +153,7 @@ const SignUp = () => {
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
-            <Image
-              source={require("../../assets/images/logo.png")}
-              resizeMode="contain"
-              style={{ width: 150, height: 150 }}
-            />
+            <LogoSvG width={150} height={150} />
           </View>
           <Text style={{ textAlign: "center", color: textColor }}>
             By Creating an account , you agree to all our{" "}
@@ -207,9 +202,13 @@ const SignUp = () => {
           />
           <CustomText style={{ fontWeight: "light" }} children={"Or"} />
           <CustomButton
-            titleColor={textColor}
+            titleColor={"black"}
             isGoogle={true}
-            style={{ width: "100%", backgroundColor: "#fff", borderWidth: 1 }}
+            style={{
+              width: "100%",
+              backgroundColor: "#fff",
+              borderWidth: 1,
+            }}
             onPress={undefined}
             text={"Google"}
           />

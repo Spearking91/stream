@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.anonymous.stream",
+      "sha256_cert_fingerprints": [
+        "4C:B4:D3:A0:57:17:40:FF:FC:3C:F0:97:19:16:15:0A:B5:DC:0A:D2:E7:A1:AB:85:39:AA:C6:04:4C:75:CD:0F",
+        "AC:E3:2D:7E:9C:CC:BC:19:0D:FD:D5:F5:63:EB:0A:8A:68:74:58:FE:31:96:81:50:EF:B9:D2:05:9F:AD:CE:93"
+      ]
+    }
+  }
+]

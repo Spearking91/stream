@@ -8,7 +8,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.stream",
+      "associatedDomains": [
+        "applinks:stream-chat-app-mobile.firebaseapp.com"
+      ]
     },
     "android": {
       "edgeToEdgeEnabled": true,
@@ -16,11 +20,16 @@
         {
           "action": "VIEW",
           "autoVerify": true,
-          "data": {
-            "scheme": "https",
-            "host": "stream-chat-app-mobile.firebaseapp.com"
-          },
-          "category": ["BROWSABLE", "DEFAULT"]
+          "data": [
+            {
+              "scheme": "https",
+              "host": "stream-chat-app-mobile.firebaseapp.com"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ],
       "package": "com.anonymous.stream"
@@ -35,7 +44,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/logo.png",
+          "image": "./assets/splash/foreground.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
@@ -47,6 +56,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "80d64eb1-0228-43ab-a5bf-bb5baf6299ca"
+      }
     }
   }
 }

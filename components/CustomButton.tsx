@@ -1,5 +1,3 @@
-import { useDeColors } from "../hooks/useDeColors";
-import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import {
   ActivityIndicator,
@@ -8,6 +6,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import GoogleSvG from "../assets/svg/google-logo.svg";
+import { useDeColors } from "../hooks/useDeColors";
 
 type props = {
   onPress: any;
@@ -44,7 +44,7 @@ const CustomButton = ({
         <ActivityIndicator color={textColor} />
       ) : (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-          {isGoogle && <AntDesign name="google" size={24} color={textColor} />}
+          {isGoogle && <GoogleSvG width={24} />}
           <Text style={{ fontWeight: "700", color: titleColor }}>{text}</Text>
         </View>
       )}

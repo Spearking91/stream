@@ -1,16 +1,20 @@
-import { auth } from "../firebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import CompanySvg from "../assets/svg/company.svg";
+import LogoSvg from "../assets/svg/logo.svg";
+import { auth } from "../firebaseConfig";
+import { useDeColors } from "../hooks/useDeColors";
+import { router } from "expo-router";
 
 const SplashScreen = () => {
   const [isAuthReady, setIsAuthReady] = useState(false);
+  const { textColor } = useDeColors();
 
   useEffect(() => {
     let hasNavigated = false;
-    let timer: number | null = null;
+    let timer: any | null = null;
 
     const setupApp = async () => {
       try {
@@ -75,31 +79,26 @@ const SplashScreen = () => {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 20,
-      }}
-    >
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Image
-          source={require("../assets/images/logo.png")}
-          resizeMode="contain"
-          style={{ width: 150, height: 150 }}
-        />
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <LogoSvg width={150} height={150} />
       </View>
-      <Text style={{ fontWeight: "bold", fontSize: 16 }}>From</Text>
-      <Image
-        source={require("../assets/images/full_logo.png")}
-        resizeMode="contain"
-        style={{ width: "40%", height: 90 }}
-      />
+      <Text style={{ fontWeight: "bold", fontSize: 16, color: textColor }}>
+        From
+      </Text>
+      <CompanySvg width={200} height={100} />
     </View>
   );
 };
 
 export default SplashScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  logoContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+});
