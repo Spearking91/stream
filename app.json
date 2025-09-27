@@ -3,7 +3,7 @@
     "name": "stream",
     "slug": "stream",
     "icon": "./assets/splash/foreground.png",
-    "version": "1.0.1",
+    "version": "2.0.1",
     "orientation": "portrait",
     "scheme": "stream",
     "userInterfaceStyle": "automatic",
