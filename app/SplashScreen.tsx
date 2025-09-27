@@ -1,80 +1,34 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { onAuthStateChanged } from "firebase/auth";
+import { router } from "expo-router";
+import { onIdTokenChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CompanySvg from "../assets/svg/company.svg";
 import LogoSvg from "../assets/svg/logo.svg";
 import { auth } from "../firebaseConfig";
 import { useDeColors } from "../hooks/useDeColors";
-import { router } from "expo-router";
 
 const SplashScreen = () => {
   const [isAuthReady, setIsAuthReady] = useState(false);
   const { textColor } = useDeColors();
 
   useEffect(() => {
-    let hasNavigated = false;
-    let timer: any | null = null;
-
-    const setupApp = async () => {
-      try {
-        // Check cached chat data (non-blocking)
-        AsyncStorage.getItem("test")
-          .then(() => {
-            console.log("AsyncStorage is working");
-          })
-          .catch((err) => {
-            console.log("AsyncStorage error:", err);
-          });
-        const cached = await AsyncStorage.getItem("chatData");
-        if (!cached) {
-          const response = await fetch(
-            "https://jsonplaceholder.typicode.com/users"
-          );
-          const json = await response.json();
-          await AsyncStorage.setItem("chatData", JSON.stringify(json));
-        } else {
-          // Optionally update in background
-          fetch("https://jsonplaceholder.typicode.com/users")
-            .then((res) => res.json())
-            .then((json) =>
-              AsyncStorage.setItem("chatData", JSON.stringify(json))
-            )
-            .catch((err) => console.error("Background update failed:", err));
-        }
-      } catch (error) {
-        console.error("Cache setup error:", error);
-      }
-    };
-
-    // Set up auth state listener
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    // onIdTokenChanged is generally better for reacting to sign-in state changes
+    // It runs when the component mounts if the user is already signed in.
+    const unsubscribe = onIdTokenChanged(auth, (user) => {
       console.log(
         "Auth state changed:",
         user ? "User logged in" : "User logged out"
       );
-
-      if (!hasNavigated) {
-        hasNavigated = true;
-        timer = setTimeout(() => {
-          if (user) {
-            router.replace("/Chats");
-          } else {
-            router.replace("/login");
-          }
-        }, 1000); // 1 second delay
-      }
-
+      // A small delay to prevent splash screen from flashing
+      setTimeout(() => {
+        router.replace(user ? "/Chats" : "/login");
+      }, 1000);
       setIsAuthReady(true);
     });
-
-    // Set up cache (independent of auth)
-    setupApp();
 
     // Cleanup function
     return () => {
       unsubscribe();
-      if (timer) clearTimeout(timer);
     };
   }, []);
 

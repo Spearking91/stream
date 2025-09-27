@@ -16,6 +16,7 @@ type props = {
   style?: any;
   titleColor?: string;
   isGoogle?: boolean;
+  disabled?: boolean;
 };
 const CustomButton = ({
   onPress,
@@ -24,6 +25,7 @@ const CustomButton = ({
   style,
   titleColor = "#fff",
   isGoogle = false,
+  disabled = false,
 }: props) => {
   const { textColor, tintColor } = useDeColors();
 
@@ -38,6 +40,7 @@ const CustomButton = ({
         backgroundColor: tintColor,
         ...style,
       }}
+      disabled={disabled}
       onPress={onPress}
     >
       {isLoading ? (

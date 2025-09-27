@@ -1,4 +1,3 @@
-import { useDeColors } from "../hooks/useDeColors";
 import {
   AntDesign,
   FontAwesome,
@@ -7,6 +6,7 @@ import {
 } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useDeColors } from "../hooks/useDeColors";
 import Avatar from "./Avatar";
 import { CustomText } from "./CustomText";
 
@@ -16,12 +16,18 @@ const ChatlistTile = ({
   onPress,
   isChat = true,
   isCall = false,
+  profile,
+  displayTrail = true,
+  time,
 }: {
   User: string;
   Message: string;
   onPress: any;
   isChat?: boolean;
   isCall?: boolean;
+  profile?: any;
+  displayTrail?: boolean;
+  time?: any;
 }) => {
   const { tabIconDefaultColor } = useDeColors();
   return (
@@ -35,7 +41,7 @@ const ChatlistTile = ({
       }}
       onPress={onPress}
     >
-      <Avatar source={undefined} />
+      <Avatar source={{ uri: profile }} />
       <View style={{ flex: 3 }}>
         <CustomText style={{ fontWeight: "500", fontSize: 18 }}>
           {User}
@@ -56,32 +62,33 @@ const ChatlistTile = ({
           </CustomText>
         </View>
       </View>
-      {isChat ? (
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-          }}
-        >
-          <CustomText style={{ fontWeight: "500", fontSize: 12 }}>
-            12:00 PM
-          </CustomText>
-          <AntDesign name="pushpino" size={16} color={tabIconDefaultColor} />
-        </View>
-      ) : (
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-          }}
-        >
-          {isCall ? (
-            <FontAwesome name="phone" size={20} color="black" />
-          ) : (
-            <Foundation name="video" size={24} color="black" />
-          )}
-        </View>
-      )}
+      {displayTrail &&
+        (isChat ? (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+            }}
+          >
+            <CustomText style={{ fontWeight: "500", fontSize: 12 }}>
+              {time}
+            </CustomText>
+            <AntDesign name="pushpin" size={16} color={tabIconDefaultColor} />
+          </View>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+            }}
+          >
+            {isCall ? (
+              <FontAwesome name="phone" size={20} color="black" />
+            ) : (
+              <Foundation name="video" size={24} color="black" />
+            )}
+          </View>
+        ))}
     </TouchableOpacity>
   );
 };

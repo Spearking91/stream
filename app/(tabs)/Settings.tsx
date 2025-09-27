@@ -1,6 +1,8 @@
 import Avatar from "../../components/Avatar";
+import { CustomText } from "../../components/CustomText";
 import SettingsTile from "../../components/SettingsTile";
 import { auth } from "../../firebaseConfig";
+import { useAuth } from "../../hooks/useAuth";
 import { useDeColors } from "../../hooks/useDeColors";
 
 import { router } from "expo-router";
@@ -9,42 +11,54 @@ import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 const Settings = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { user, loading } = useAuth();
   const { backgroundColor } = useDeColors();
-  const [data] = useState([
+
+  const creationTime = user?.metadata.creationTime;
+  const formattedCreationDate = creationTime
+    ? new Date(creationTime).toLocaleString("default", {
+        month: "long",
+        year: "numeric",
+      })
+    : "";
+
+  const personalInfoData = [
     {
       Icon: "user",
       subject: "Username",
-      subtitle: "User1234",
+      subtitle: user?.displayName || "No username",
     },
     {
       Icon: "mail",
       subject: "Email",
-      subtitle: "User@example.com",
+      subtitle: user?.email || "",
     },
     {
-      Icon: "moon",
-      subject: "Dark Mode",
-      subtitle: "Dark",
+      Icon: "phone",
+      subject: "Phone Number",
+      subtitle: user?.phoneNumber || "Not set",
     },
-  ]);
-  const [Account] = useState([
+    {
+      Icon: "info",
+      subject: "About",
+      subtitle: "I am using Stream!",
+    },
+  ];
+  const accountActions = [
+    {
+      Icon: "chevrons-down",
+      onPress: () => router.push("/Update"),
+      subject: "Update App",
+      subtitle: "",
+    },
     {
       Icon: "log-out",
-      onPress: () => {
-        logOut();
-      },
+      onPress: () => logOut(),
       subject: "Logout",
       subtitle: "",
     },
-    {
-      Icon: "user",
-      onPress: () => {
-        router.push("/SettingsPage");
-      },
-      subject: "New Page",
-      subtitle: "",
-    },
-  ]);
+  ];
+
   const logOut = async () => {
     setIsLoading(true);
     try {
@@ -58,6 +72,11 @@ const Settings = () => {
     }
   };
 
+  if (loading) {
+    // You can return a loading spinner for the whole screen here
+    return <ActivityIndicator style={{ flex: 1 }} size="large" />;
+  }
+
   return (
     <View
       style={{
@@ -67,11 +86,21 @@ const Settings = () => {
         backgroundColor: backgroundColor,
       }}
     >
-      <View>
-        <Avatar source={undefined} />
+      <View style={{ alignItems: "center" }}>
+        <Avatar source={{ uri: user?.details?.profileUrl }} radius={150} />
+        <CustomText style={{ fontSize: 20, fontWeight: "bold", marginTop: 10 }}>
+          {user?.displayName || "No Name"}
+        </CustomText>
+        <CustomText style={{ fontSize: 16, color: "gray" }}>
+          Active since - {formattedCreationDate}
+        </CustomText>
       </View>
-      <SettingsTile title={"Preferences"} Icon={undefined} data={data} />
-      <SettingsTile title={"Account"} Icon={undefined} data={Account} />
+      <SettingsTile
+        title={"Personal Information"}
+        Icon={undefined}
+        data={personalInfoData}
+      />
+      <SettingsTile title={"Account"} Icon={undefined} data={accountActions} />
       {isLoading && <ActivityIndicator />}
     </View>
   );

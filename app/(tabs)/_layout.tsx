@@ -1,11 +1,26 @@
-import Avatar from "../../components/Avatar";
-import { useDeColors } from "../../hooks/useDeColors";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
+import Avatar from "../../components/Avatar";
+import { useAuth } from "../../hooks/useAuth";
+import { useDeColors } from "../../hooks/useDeColors";
+
+function HeaderRightAvatar() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <ActivityIndicator style={{ marginRight: 15 }} />;
+  }
+
+  return (
+    <View style={{ marginRight: 10 }}>
+      <Avatar radius={35} source={{ uri: user?.details?.profileUrl }} />
+    </View>
+  );
+}
 
 export default function TabsLayout() {
-  const { textColor, backgroundColor } = useDeColors();
+  const { textColor, backgroundColor, tintColor } = useDeColors();
   return (
     <Tabs
       screenOptions={{
@@ -20,17 +35,12 @@ export default function TabsLayout() {
         options={{
           title: "Chats",
           headerTitle: "Chats",
-          headerTitleStyle: { fontWeight: "bold", color: "#1E90FF" },
+          headerTitleStyle: { fontWeight: "bold", color: tintColor },
           headerShown: true,
           tabBarIcon: ({ color }) => (
             <Ionicons name="chatbox-outline" size={24} color={color} />
           ),
-          headerRight: () => (
-            <View style={{ marginRight: 10, gap: 30, flexDirection: "row" }}>
-              {/* <Feather name="more-vertical" size={24} color="black" /> */}
-              <Avatar radius={35} source={undefined} />
-            </View>
-          ),
+          headerRight: () => <HeaderRightAvatar />,
         }}
       />
       <Tabs.Screen

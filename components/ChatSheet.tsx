@@ -4,9 +4,11 @@ import { StyleSheet, Text, View } from "react-native";
 const ChatSheet = ({
   message,
   isUser,
+  isRead,
 }: {
   message: string;
   isUser: boolean;
+  isRead: boolean;
 }) => {
   return (
     <View
@@ -15,7 +17,11 @@ const ChatSheet = ({
         borderBottomStartRadius: 10,
         borderTopLeftRadius: isUser ? 10 : 0,
         borderTopRightRadius: isUser ? 0 : 10,
-        backgroundColor: isUser ? "#c6f3f8ff" : "#f9fbf8ff",
+        backgroundColor: isUser
+          ? "#c6f3f8ff"
+          : isRead === false
+          ? "rgba(0, 255, 0, 0.2)"
+          : "#f9fbf8ff",
         borderWidth: 1,
         borderColor: "black",
         minWidth: 100,

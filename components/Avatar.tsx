@@ -8,7 +8,7 @@ const Avatar = ({
 }: {
   style?: any;
   radius?: number;
-  source: any;
+  source?: any;
 }) => {
   return (
     <TouchableOpacity

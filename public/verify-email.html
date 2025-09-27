@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Verifying your email...</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f5f5f5;
+      }
+      .container {
+        text-align: center;
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+      }
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #007aff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .message {
+        color: #333;
+        margin: 20px 0;
+        line-height: 1.5;
+      }
+      .error {
+        color: #d32f2f;
+      }
+      .success {
+        color: #2e7d32;
+      }
+    </style>
+    <script>
+      (function () {
+        // Your app's custom scheme
+        var appScheme = "stream";
+        var deepLinkPath = "verify-email";
+
+        // Get URL parameters
+        var urlParams = new URLSearchParams(window.location.search);
+        var oobCode = urlParams.get("oobCode");
+        var mode = urlParams.get("mode");
+        var webFallbackUrl = urlParams.get("link");
+
+        console.log("URL Parameters:", {
+          oobCode: oobCode,
+          mode: mode,
+          webFallbackUrl: webFallbackUrl,
+        });
+
+        if (!oobCode) {
+          document.addEventListener("DOMContentLoaded", function () {
+            document.body.innerHTML = `
+              <div class="container">
+                <div class="message error">
+                  Invalid verification link. Missing verification code.
+                </div>
+              </div>
+            `;
+          });
+          return;
+        }
+
+        if (mode !== "verifyEmail") {
+          document.addEventListener("DOMContentLoaded", function () {
+            document.body.innerHTML = `
+              <div class="container">
+                <div class="message error">
+                  Invalid verification link. Incorrect mode: ${mode}
+                </div>
+              </div>
+            `;
+          });
+          return;
+        }
+
+        // Construct the deep link with the oobCode
+        var deepLink =
+          appScheme +
+          "://" +
+          deepLinkPath +
+          "?oobCode=" +
+          encodeURIComponent(oobCode);
+
+        console.log("Attempting to open deep link:", deepLink);
+
+        // Try to open the app immediately
+        var attemptedAppOpen = false;
+
+        // For iOS Safari
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          // Create an invisible iframe to trigger the app
+          var iframe = document.createElement("iframe");
+          iframe.style.display = "none";
+          iframe.src = deepLink;
+          document.body.appendChild(iframe);
+          attemptedAppOpen = true;
+        } else {
+          // For other browsers, try direct location change
+          try {
+            window.location.href = deepLink;
+            attemptedAppOpen = true;
+          } catch (e) {
+            console.log("Direct location change failed:", e);
+          }
+        }
+
+        // Fallback: if app doesn't open within 2.5 seconds, show manual options
+        setTimeout(function () {
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("fallback").style.display = "block";
+        }, 2500);
+
+        // Final fallback after 5 seconds
+        setTimeout(function () {
+          if (webFallbackUrl) {
+            window.location.replace(webFallbackUrl);
+          }
+        }, 5000);
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div id="loading">
+        <div class="spinner"></div>
+        <div class="message">Verifying your email and opening the app...</div>
+      </div>
+
+      <div id="fallback" style="display: none">
+        <div class="message">
+          <strong>App didn't open automatically?</strong><br />
+          Please open your Stream app manually to complete email verification.
+        </div>
+        <div style="margin-top: 20px">
+          <button
+            onclick="window.location.href='stream://verify-email?oobCode=' + new URLSearchParams(window.location.search).get('oobCode')"
+            style="
+              background: #007aff;
+              color: white;
+              border: none;
+              padding: 12px 24px;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 16px;
+            "
+          >
+            Open App
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

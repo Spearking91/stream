@@ -1,13 +1,15 @@
 import { Entypo, Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { Link, router } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  updateProfile,
+  signInWithEmailAndPassword,
+  updateProfile as updateAuthProfile,
 } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   BackHandler,
   FlatList,
   StyleSheet,
@@ -24,10 +26,13 @@ import { CustomText } from "../../components/CustomText";
 import CustomTextInput from "../../components/CustomTextInput";
 import { auth } from "../../firebaseConfig";
 import { useDeColors } from "../../hooks/useDeColors";
+import { uploadProfilePicture } from "../services/FirebaseStorage";
+import { CreateUserDetails } from "../services/FirestoreServices";
 
 const TOTAL_PAGES = 5; // Set this to your actual number of pages
 
 const SignUp = () => {
+  const params = useLocalSearchParams<{ page?: string }>();
   const [isCheck, setIsCheck] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +40,9 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(false);
   const [username, setUsername] = useState("");
-  const [initialPage, setInitialPage] = useState(0);
+  const [initialPage, setInitialPage] = useState(
+    params.page ? parseInt(params.page, 10) : 0
+  );
   const { textColor, tintColor } = useDeColors();
   const [correct, setCorrect] = useState(false);
   const [newImage, setNewImage] = useState<any>(null);
@@ -76,7 +83,7 @@ const SignUp = () => {
 
   useEffect(() => {
     setPasswordChecks(getPasswordChecks(password));
-  }, [password]);
+  }, [password, confirmpassword]);
 
   useEffect(() => {
     const onBackPress = () => {
@@ -103,27 +110,87 @@ const SignUp = () => {
         password
       );
       if (userCredential.user) {
-        // Set the user's display name
-        await updateProfile(userCredential.user, {
-          displayName: username,
-        });
-
-        // Send the verification email with the deep link
-        await sendEmailVerification(userCredential.user, {
-          // This is a standard web link. The OS will open the app if it's
-          // configured for Universal Links / App Links.
-          url: `https://stream-chat-app-mobile.firebaseapp.com/verify-email`,
-        });
-
-        // Redirect to a page telling the user to check their email
-        router.replace({
-          pathname: "/(auth)/PleaseVerifyEmail",
-          params: { email: email },
-        });
+        await sendVerificationAndRedirect(userCredential.user);
       }
     } catch (error: any) {
-      console.error("Signup failed: ", error);
-      // Consider replacing this with a user-friendly toast/snackbar
+      if (error.code === "auth/email-already-in-use") {
+        // This email is already registered. Let's try to sign them in.
+        try {
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          const user = userCredential.user;
+          if (!user.emailVerified) {
+            // The account exists but is not verified. Resend email.
+            Alert.alert(
+              "Account Not Verified",
+              "This account already exists but has not been verified. We are sending another verification email."
+            );
+            await sendVerificationAndRedirect(user);
+          } else {
+            // The account is already verified, so just log them in.
+            router.replace("/(tabs)/Chats");
+          }
+        } catch (signInError: any) {
+          Alert.alert("Login Failed", "The password you entered is incorrect.");
+        }
+      } else {
+        console.error("Signup failed: ", error);
+        Alert.alert("Signup Failed", error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendVerificationAndRedirect = async (user: any) => {
+    await sendEmailVerification(user, {
+      url: `https://stream-chat-app-mobile.firebaseapp.com/verify-email.html`,
+    });
+    router.replace({
+      pathname: "/(auth)/PleaseVerifyEmail",
+      params: { email: email },
+    });
+  };
+
+  const updateProfile = async () => {
+    if (!auth.currentUser) return;
+    setIsLoading(true);
+
+    try {
+      let profileUrl = "";
+      // 1. If a new image is selected, upload it to Firebase Storage
+      if (newImage?.uri) {
+        const response = await fetch(newImage.uri);
+        const blob = await response.blob();
+        const downloadURL = await uploadProfilePicture(
+          auth.currentUser.uid,
+          blob
+        );
+        if (downloadURL) {
+          profileUrl = downloadURL;
+        }
+      }
+
+      // Update Firebase Auth profile
+      await updateAuthProfile(auth.currentUser, {
+        photoURL: profileUrl,
+        displayName: username,
+      });
+
+      // 2. Create the user document in Firestore with the profile URL
+      await CreateUserDetails(auth.currentUser.uid, {
+        username: username,
+        email: auth.currentUser.email || "",
+        profileUrl: profileUrl,
+      });
+
+      // 3. Navigate to the main app
+      router.replace("/(tabs)/Chats");
+    } catch (error) {
+      console.error("Profile update failed: ", error);
     } finally {
       setIsLoading(false);
     }
@@ -214,7 +281,11 @@ const SignUp = () => {
           />
         </View>
 
-        <CustomButton onPress={nextPage} text={"Continue"} />
+        <CustomButton
+          onPress={nextPage}
+          text={"Continue"}
+          isLoading={isLoading}
+        />
       </SafeAreaView>
       {/* Page 3 (OTP) is now removed. Page 4 becomes Page 3 */}
       <SafeAreaView key={3} style={{ flex: 1, padding: 10 }}>
@@ -271,7 +342,11 @@ const SignUp = () => {
             )}
           />
         </View>
-        <CustomButton onPress={nextPage} text={"Continue"} />
+        <CustomButton
+          onPress={signup}
+          text={"Continue"}
+          isLoading={isLoading}
+        />
       </SafeAreaView>
       <SafeAreaView // This was key={5}, now it's key={4}
         key={4}
@@ -289,15 +364,16 @@ const SignUp = () => {
           }}
         >
           <TouchableOpacity
-            // onPress={pickImage}
+            onPress={pickImage}
             style={{
               flexShrink: 1,
             }}
           >
             <Avatar
-              // source={newImage && newImage.uri ? { uri: newImage.uri } : undefined}
+              source={
+                newImage && newImage.uri ? { uri: newImage.uri } : undefined
+              }
               radius={200}
-              source={undefined}
             />
             <View
               style={{
@@ -324,7 +400,7 @@ const SignUp = () => {
         </View>
         <CustomButton
           isLoading={isLoading}
-          onPress={signup}
+          onPress={updateProfile}
           text={"Create Account"}
         />
       </SafeAreaView>

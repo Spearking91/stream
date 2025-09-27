@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   addDoc,
   collection,
@@ -8,25 +9,27 @@ import {
   or,
   orderBy,
   query,
+  runTransaction,
+  setDoc,
   Timestamp,
   where,
 } from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig";
 
-export async function CreateUserDetails(
-  username: string,
-  email: string,
-  profileUrl: string
-) {
+type UserDetails = {
+  username: string;
+  email: string;
+  profileUrl: string;
+};
+
+export async function CreateUserDetails(userId: string, details: UserDetails) {
   try {
-    const docRef = await addDoc(collection(db, "users"), {
-      username: username,
-      email: email,
-      profileUrl: profileUrl,
+    const userDocRef = doc(db, "users", userId);
+    await setDoc(userDocRef, {
+      ...details,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    return docRef.id;
   } catch (error) {
     console.error("Error adding document: ", error);
   }
@@ -102,6 +105,7 @@ export async function CreateChatPage(
       lastMessage: "",
       lastMessageTimestamp: Timestamp.now(),
       createdAt: Timestamp.now(),
+      unreadCount: { [startUserId]: 0, [recepientUserId]: 0 },
       updatedAt: Timestamp.now(),
     });
     return docRef.id;
@@ -114,6 +118,15 @@ export async function CreateChatPage(
 export function listenToUserChats(callback: (chats: any[]) => void) {
   const currentUserId = auth.currentUser?.uid;
   if (!currentUserId) return () => {};
+
+  const cacheKey = `user_chats_${currentUserId}`;
+
+  // Immediately try to load from cache
+  AsyncStorage.getItem(cacheKey).then((cachedData) => {
+    if (cachedData) {
+      callback(JSON.parse(cachedData));
+    }
+  });
 
   const chatsRef = collection(db, "chats");
   const q = query(
@@ -140,8 +153,115 @@ export function listenToUserChats(callback: (chats: any[]) => void) {
       return null;
     });
     const chats = (await Promise.all(chatsPromises)).filter(Boolean);
+    // Update cache with fresh data
+    AsyncStorage.setItem(cacheKey, JSON.stringify(chats)).catch((error) =>
+      console.error("Failed to cache chats:", error)
+    );
+
     callback(chats as any[]);
   });
 
   return unsubscribe;
+}
+
+export async function sendMessageToChat(
+  chatId: string,
+  senderId: string,
+  content: string
+) {
+  try {
+    // Add the message to the messages subcollection
+    const messagesRef = collection(db, "chats", chatId, "messages");
+    await addDoc(messagesRef, {
+      senderId: senderId,
+      content: content,
+      isRead: false,
+      createdAt: Timestamp.now(),
+    });
+
+    // Update the last message on the parent chat document
+    const chatRef = doc(db, "chats", chatId);
+    await setDoc(
+      chatRef,
+      {
+        lastMessage: content,
+        lastMessageTimestamp: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      },
+      { merge: true }
+    );
+
+    // Increment unread count for the recipient
+    await runTransaction(db, async (transaction) => {
+      const chatDoc = await transaction.get(chatRef);
+      if (!chatDoc.exists()) {
+        throw "Document does not exist!";
+      }
+      const chatData = chatDoc.data();
+      const recipientId = chatData.participants.find(
+        (id: string) => id !== senderId
+      );
+      if (recipientId) {
+        const newCount = (chatData.unreadCount?.[recipientId] || 0) + 1;
+        transaction.update(chatRef, {
+          [`unreadCount.${recipientId}`]: newCount,
+        });
+      }
+    });
+  } catch (error) {
+    console.error("Error adding document: ", error);
+  }
+}
+
+export function listenToMessages(
+  chatId: string,
+  callback: (messages: any[]) => void
+) {
+  const cacheKey = `chat_messages_${chatId}`;
+
+  // Immediately try to load from cache
+  AsyncStorage.getItem(cacheKey).then((cachedData) => {
+    if (cachedData) {
+      callback(JSON.parse(cachedData));
+    }
+  });
+
+  const messagesRef = collection(db, "chats", chatId, "messages");
+  const q = query(messagesRef, orderBy("createdAt", "asc"));
+
+  return onSnapshot(q, (querySnapshot) => {
+    const messages = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Update cache with fresh data
+    AsyncStorage.setItem(cacheKey, JSON.stringify(messages)).catch((error) =>
+      console.error("Failed to cache messages:", error)
+    );
+    callback(messages);
+  });
+}
+
+export async function markMessagesAsRead(
+  chatId: string,
+  currentUserId: string
+) {
+  if (!chatId || !currentUserId) return;
+
+  try {
+    // Reset the unread count for the current user for this chat.
+    const chatRef = doc(db, "chats", chatId);
+    await setDoc(
+      chatRef,
+      {
+        unreadCount: {
+          [currentUserId]: 0,
+        },
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error("Error marking messages as read: ", error);
+  }
 }

@@ -62,12 +62,13 @@ const PostTile = () => {
           paddingHorizontal: 10,
         }}
       >
-        <ThemedText type="defaultSemiBold">
+        <CustomText>
+          {" "}
           This is a sample post description Lorem ipsum dolor sit amet,
           consectetur adipisicing elit. Officia quo dicta nihil corporis
           dignissimos maiores, quasi at harum magnam, a ut maxime, eveniet
           consectetur nulla exercitationem. Illum eum nulla iure?
-        </ThemedText>
+        </CustomText>
       </View>
       <View style={{ flex: 5, backgroundColor: "#ccc", width: "100%" }}>
         <Image
@@ -108,8 +109,8 @@ const PostTile = () => {
               paddingHorizontal: 10,
             }}
           >
-            <AntDesign name="like2" size={24} color="black" />
-            <ThemedText type="defaultSemiBold">0</ThemedText>
+            <AntDesign name="like" size={24} color="black" />
+            <CustomText>0</CustomText>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -125,7 +126,7 @@ const PostTile = () => {
             }}
           >
             <FontAwesome name="commenting-o" size={24} color="black" />
-            <ThemedText type="defaultSemiBold">0</ThemedText>
+            <CustomText>0</CustomText>
           </TouchableOpacity>
         </View>
         <View
@@ -138,7 +139,7 @@ const PostTile = () => {
           }}
         >
           <AntDesign name="eye" size={24} color="black" />
-          <ThemedText type="defaultSemiBold">0</ThemedText>
+          <CustomText>0</CustomText>
         </View>
       </View>
     </View>

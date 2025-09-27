@@ -26,3 +26,5 @@ export async function uploadProfilePicture(userId: any, file: any) {
     throw error;
   }
 }
+
+

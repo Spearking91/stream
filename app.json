@@ -2,7 +2,8 @@
   "expo": {
     "name": "stream",
     "slug": "stream",
-    "version": "1.0.0",
+    "icon": "./assets/splash/foreground.png",
+    "version": "1.0.1",
     "orientation": "portrait",
     "scheme": "stream",
     "userInterfaceStyle": "automatic",

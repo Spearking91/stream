@@ -2,11 +2,9 @@ import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   Modal,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -40,6 +38,48 @@ const Chats = () => {
     return () => unsubscribe(); // Cleanup listener on unmount
   }, []);
 
+  // Helper function to safely convert timestamp to date
+  const getFormattedTime = (timestamp: any) => {
+    if (!timestamp) return "No time";
+
+    try {
+      let date: Date;
+
+      // Check if it's a Firestore Timestamp with toDate method
+      if (timestamp.toDate && typeof timestamp.toDate === "function") {
+        date = timestamp.toDate();
+      }
+      // Check if it's already a Date object
+      else if (timestamp instanceof Date) {
+        date = timestamp;
+      }
+      // Check if it's a timestamp in milliseconds (number)
+      else if (typeof timestamp === "number") {
+        date = new Date(timestamp);
+      }
+      // Check if it's a timestamp in seconds (Firestore format)
+      else if (timestamp.seconds) {
+        date = new Date(timestamp.seconds * 1000);
+      }
+      // Try to parse as string
+      else if (typeof timestamp === "string") {
+        date = new Date(timestamp);
+      } else {
+        return "Invalid time";
+      }
+
+      // Validate the date
+      if (isNaN(date.getTime())) {
+        return "Invalid time";
+      }
+
+      return date.toLocaleTimeString();
+    } catch (error) {
+      console.error("Error formatting timestamp:", error);
+      return "Invalid time";
+    }
+  };
+
   // 2. Filter data based on search
   const filteredData = chats
     ? chats.filter((item) =>
@@ -50,7 +90,10 @@ const Chats = () => {
   const handleUserSearch = async (text: string) => {
     setUserSearch(text);
     const results = await searchUsersByUsername(text);
-    setSearchResults(results || []);
+    // Filter out the current user from the search results
+    const filteredResults =
+      results?.filter((user) => user.id !== auth.currentUser?.uid) || [];
+    setSearchResults(filteredResults);
   };
 
   const handleCreateChat = async (recepientId: string) => {
@@ -100,19 +143,31 @@ const Chats = () => {
         style={{ flex: 1 }}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ChatlistTile
-            User={item.recepient?.username}
-            Message={item.lastMessage || "No messages yet"}
-            onPress={() =>
-              router.push({
-                pathname: "/(pages)/ChatPage",
-                params: {
-                  chatId: item.id,
-                  recepient: JSON.stringify(item.recepient),
-                },
-              })
-            }
-          />
+          <View
+            style={{
+              backgroundColor:
+                item.unreadCount?.[auth.currentUser?.uid || ""] > 0
+                  ? "rgba(0, 255, 0, 0.1)"
+                  : "transparent",
+              borderRadius: 10,
+            }}
+          >
+            <ChatlistTile
+              profile={item.recepient?.profileUrl}
+              User={item.recepient?.username}
+              Message={item.lastMessage || "No messages yet"}
+              time={getFormattedTime(item.lastMessageTimestamp)}
+              onPress={() =>
+                router.push({
+                  pathname: "/(pages)/ChatPage",
+                  params: {
+                    chatId: item.id,
+                    recepient: JSON.stringify(item.recepient),
+                  },
+                })
+              }
+            />
+          </View>
         )}
       />
 
@@ -131,7 +186,7 @@ const Chats = () => {
       >
         <Feather name="plus-circle" size={40} color={"#fff"} />
       </TouchableOpacity>
-      <Modal animationType="slide" transparent={true} visible={isLoading}>
+      {/* <Modal animationType="slide" transparent={true} visible={isLoading}>
         <View
           style={{
             flex: 1,
@@ -154,7 +209,7 @@ const Chats = () => {
             <ActivityIndicator size="large" color={tintColor} />
           </View>
         </View>
-      </Modal>
+      </Modal> */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -203,6 +258,8 @@ const Chats = () => {
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <ChatlistTile
+                  displayTrail={false}
+                  profile={item.profileUrl}
                   User={item.username}
                   Message={item.email}
                   onPress={() => {
